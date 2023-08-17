@@ -22,7 +22,7 @@ class Logger(object):
 
     __instance = None
 
-    def __int__(self):
+    def __init__(self):
         raise RuntimeError('Call instance() instead')
 
     @classmethod
@@ -37,27 +37,58 @@ class MorePythonicLogger(object):
 
     __instance = None
 
-    def __new__(cls):
+    def __new__(cls, *args, **kwargs):
         if cls.__instance is None:
             print('Creating new instance')
             cls.__instance = super(MorePythonicLogger, cls).__new__(cls)
         return cls.__instance
 
+    def __init__(self, a):
+        self.__a = a
+
+    def get_a(self):
+        return self.__a
+
+class RegionConfig(object):
+
+    __instance = {}
+    def __init__(self, region):
+        self.__region = region
+
+    @classmethod
+    def create_instance(cls, region):
+        if region not in cls.__instance:
+            cls.__instance[region] = cls(region)
+        return cls.__instance[region]
+
+
 class Main(object):
     """
     $ python src/patterns/singleton.py
 
+    True
     Creating new instance
-    <__main__.Logger object at 0x1012d3a30>
-    <__main__.Logger object at 0x1012d3a30>
+    <__main__.MorePythonicLogger object at 0x100983cd0>
+    1
+    <__main__.MorePythonicLogger object at 0x100983cd0>
+    2
+    2
     Are log1 and log2 the same? True
     """
 
     def main(self):
-        log1 = Logger().instance()
+
+        region_conf = RegionConfig.create_instance('US')
+        region_conf1 = RegionConfig.create_instance('US')
+        print(region_conf is region_conf1)
+
+        log1 = MorePythonicLogger(1)
         print(log1)
-        log2 = Logger().instance()
+        print(log1.get_a())
+        log2 = MorePythonicLogger(2)
         print(log2)
+        print(log1.get_a())
+        print(log2.get_a())
         print('Are log1 and log2 the same?', log1 is log2)
 
 if __name__ == '__main__':

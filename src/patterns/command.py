@@ -23,6 +23,7 @@ class AbsCommand(ABC):
         Action
         """
 
+    @abstractmethod
     def unexecute(self):
         """
         Undo

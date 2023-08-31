@@ -17,6 +17,8 @@ OO Principles
 
 Thoughts:
 - I guess we can also say we have a "Comparison Pattern", where the comparison logic is encapsulated.
+
+Refer to: https://python-patterns.guide/gang-of-four/iterator/
 """
 
 class OddNumbers(object):
